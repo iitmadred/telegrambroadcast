@@ -1,23 +1,3 @@
-# 📣 Telegram Broadcast Streamlit App
-
-This repo-ready content gives you a single-file Streamlit app (`app.py`) plus deployment notes. It supports:
-
-* Writing Telegram post content with **HTML formatting** (bold, italic, links, etc.)
-* Live HTML preview inside the app
-* Uploading a **thumbnail/image** (photo) to send with the caption
-* Loading chat IDs from: **uploaded .txt**, **pasted text**, or a **GitHub raw URL**
-* Async concurrent sending with progress & per-recipient status
-* Safe token handling via **`st.secrets`** (no hardcoding)
-
-> ⚠️ Please only message recipients who have opted in. Respect Telegram’s anti-spam rules and rate limits.
-
----
-
-## Files
-
-### `app.py`
-
-```python
 import asyncio
 import io
 import os
@@ -55,15 +35,20 @@ with st.expander("📝 Compose Message", expanded=True):
     caption_html = st.text_area(
         "Caption (Telegram HTML)",
         height=220,
-        placeholder="""
-<b>🚀 AI Power Combo – Just ₹1899!</b>\n\nUnlock the smartest AI tools at the lowest price!\n\n✅ Feature 1\n✅ Feature 2\n\n<b>Claim your spot</b> ...
-""",
+        placeholder="""<b>🚀 AI Power Combo – Just ₹1899!</b>
+
+Unlock the smartest AI tools at the lowest price!
+
+✅ Feature 1
+✅ Feature 2
+
+<b>Claim your spot</b> ...""",
     )
     st.write("Preview (HTML rendered in Streamlit, will be sent to Telegram as HTML):")
     st.markdown(caption_html, unsafe_allow_html=True)
 
 with st.expander("🖼️ Thumbnail / Image (optional)"):
-    image_file = st.file_uploader("Upload image to send as photo (JPG/PNG)", type=["jpg", "jpeg", "png"])    
+    image_file = st.file_uploader("Upload image to send as photo (JPG/PNG)", type=["jpg", "jpeg", "png"])
 
 with st.expander("👥 Chat IDs Source", expanded=True):
     source = st.radio(
@@ -230,85 +215,5 @@ st.markdown("""
 - Use **HTML parse mode** only with Telegram-supported tags: `<b>`, `<i>`, `<u>`, `<s>`, `<a href>`, `<code>`, `<pre>`, etc.
 - Respect Telegram anti-spam and rate limits. Large fan-outs may require throttling.
 - Keep your bot token in **Secrets**, never commit it to the repo.
+- ⚠️ Please only message recipients who have opted in. Respect Telegram's anti-spam rules and rate limits.
 """)
-```
-
-### `requirements.txt`
-
-```
-streamlit>=1.38
-python-telegram-bot>=21.0
-nest_asyncio>=1.5.8
-requests>=2.31
-```
-
-### `.streamlit/secrets.toml` (do **not** commit with a real token)
-
-```
-TELEGRAM_TOKEN = "YOUR_BOT_TOKEN_HERE"
-```
-
-On Streamlit Cloud: **Settings → Secrets** and paste the same TOML content with your real token.
-
-### `chat_ids.txt` (in your GitHub repo)
-
-```
-# One chat ID per line. Lines starting with # are ignored.
-123456789
-987654321
-...
-```
-
-> Keep the filename consistent (`chat_ids.txt`). In the app, choose **GitHub raw URL** and paste the raw link, e.g. `https://raw.githubusercontent.com/<user>/<repo>/<branch>/chat_ids.txt`.
-
-### `README.md`
-
-````md
-# Telegram Broadcast (Streamlit)
-
-A Streamlit app to broadcast a Telegram post (HTML caption) and optional image to many chat IDs concurrently.
-
-## Deploy on Streamlit Cloud
-1. Fork this repo.
-2. Add **Secrets** with:
-   ```toml
-   TELEGRAM_TOKEN = "YOUR_BOT_TOKEN_HERE"
-````
-
-3. Set **Python version** to 3.10+ and point the app to `app.py`.
-4. Open the app, compose your message, choose chat ID source, and send.
-
-## Local Run
-
-```bash
-pip install -r requirements.txt
-streamlit run app.py
-```
-
-## Chat IDs
-
-Provide chat IDs via:
-
-* Upload `.txt` (one per line), or
-* Paste, or
-* GitHub raw URL to `chat_ids.txt` in this repo.
-
-## Safe Use
-
-Only message users who opted in. Follow Telegram terms and rate limits.
-
-```
-
----
-
-## FAQ
-**Q: Can I still send without an image?**  
-A: Yes — the app will send a text message if no image is uploaded.
-
-**Q: Does the HTML preview match Telegram exactly?**  
-A: It’s close; both are HTML-based, but Telegram supports a specific subset. When in doubt, do a **Dry run** first.
-
-**Q: What’s a good concurrency?**  
-A: Start with ~10. Increase slowly and monitor errors to avoid rate limiting.
-
-```
