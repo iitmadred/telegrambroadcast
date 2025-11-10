@@ -1,0 +1,4 @@
+streamlit>=1.38
+python-telegram-bot>=21.0
+nest_asyncio>=1.5.8
+requests>=2.31
