@@ -1,4 +1,8 @@
-streamlit>=1.38
+# Core dependencies
+streamlit>=1.38.0
 python-telegram-bot>=21.0
 nest_asyncio>=1.5.8
-requests>=2.31
+requests>=2.31.0
+
+# Additional utilities
+python-dotenv>=1.0.0
